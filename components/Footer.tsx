@@ -23,7 +23,7 @@ const LINKS: Array<{
   { href: personal.socials.github, label: "GitHub", icon: Github, hue: 265, external: true },
   {
     href: personal.socials.androidPortfolio,
-    label: "Android",
+    label: "Android Portfolio",
     icon: Smartphone,
     hue: 151,
     external: true,
