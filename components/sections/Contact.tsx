@@ -92,15 +92,15 @@ export function Contact() {
       form.reset();
       toast({
         title: "Message sent",
-        description: "Thanks — I'll reply within 24h.",
+        description: "Thanks — I'll reply soon :)",
         variant: "success",
       });
     } catch {
       setStatus("error");
       toast({
-        title: "Couldn't send",
+        title: "Couldn't send message",
         description:
-          "Server-side email isn't configured yet. Email me directly while we wait.",
+          "Server-side Error. You may email me directly at 'shubham.hadawle@gmail.com'",
         variant: "error",
       });
     }
