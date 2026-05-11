@@ -6,7 +6,7 @@ Designed to read like a senior Silicon Valley engineer built it himself — mini
 
 ---
 
-## ✨ Highlights
+## Highlights
 
 - **Next.js 14 (App Router)** · **TypeScript** · **Tailwind CSS** · **Framer Motion** · **shadcn-style primitives** · **Lucide icons**
 - Animated grid backdrop, floating particles, cinematic reveal animations
@@ -25,7 +25,7 @@ Designed to read like a senior Silicon Valley engineer built it himself — mini
 
 ---
 
-## 🧱 Architecture
+## Architecture
 
 ```
 portfolio/
@@ -78,7 +78,7 @@ All resume content (experience, projects, research, tech stack) lives in `lib/da
 
 ---
 
-## 🚀 Getting started
+## Getting started
 
 > Requires **Node.js 18.18+** (Node 20 LTS recommended).
 
@@ -110,7 +110,7 @@ npm run start
 
 ---
 
-## ✉️ Contact form (server-side email)
+## Contact form (server-side email)
 
 The contact form posts to `app/api/contact/route.ts`, which uses **Nodemailer** to send mail via SMTP. The destination email is **hidden from the client**; the user never sees it.
 
@@ -137,7 +137,7 @@ The route also includes:
 
 ---
 
-## 🎨 Design system
+## Design system
 
 - **Palette** — graphite / matte black with carefully calibrated muted-foreground contrast. Light theme mirrors it with the same hierarchy.
 - **Typography** — `Inter` for UI, `JetBrains Mono` for terminal / code / labels.
@@ -149,7 +149,7 @@ Tokens live in `app/globals.css` and `tailwind.config.ts`. Swap the HSL CSS vari
 
 ---
 
-## ⌨️ Keyboard shortcuts
+## Keyboard shortcuts
 
 | Shortcut          | Action                          |
 | ----------------- | ------------------------------- |
@@ -160,7 +160,7 @@ Tokens live in `app/globals.css` and `tailwind.config.ts`. Swap the HSL CSS vari
 
 ---
 
-## 🌐 Deployment (Vercel)
+## Deployment (Vercel)
 
 1. Push the `portfolio/` folder to a GitHub repo.
 2. On [vercel.com](https://vercel.com), **Import Project** and select that repo.
@@ -172,7 +172,7 @@ For other hosts (Netlify, Cloudflare Pages, AWS Amplify) the project works as a 
 
 ---
 
-## ♿ Accessibility & performance
+## Accessibility & performance
 
 - All interactive elements are reachable by keyboard and have visible focus rings.
 - Skip-to-content link, semantic `<header>` / `<main>` / `<footer>`.
@@ -183,7 +183,7 @@ For other hosts (Netlify, Cloudflare Pages, AWS Amplify) the project works as a 
 
 ---
 
-## 🛠️ Future enhancements
+## Future enhancements
 
 - React Three Fiber 3D hero artifact
 - GSAP horizontal scroll for the projects rail
@@ -195,9 +195,6 @@ For other hosts (Netlify, Cloudflare Pages, AWS Amplify) the project works as a 
 
 ---
 
-## 🪪 Credits
+## Credits
 
-Designed and engineered end-to-end by **Shubham Hadawle**.
-
-If you found this useful, the source is permissively reusable — please change the personal data, swap the logos, and make it your own.
-# shubhams-website
+Designed and created by **Shubham Hadawle**.
