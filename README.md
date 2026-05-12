@@ -1,8 +1,6 @@
-# Shubham Hadawle · Portfolio
+# Shubham Hadawle · Website Portfolio
 
-A handcrafted, production-grade personal portfolio for **Shubham Hadawle** — MS in Computer Science at Northeastern University (Khoury College of Computer Science), engineering across Software, AI/ML, Data Science, and applied research.
-
-Designed to read like a senior Silicon Valley engineer built it himself — minimal, futuristic, dark-mode-first, command-palette-driven, motion-rich, and obsessively detailed.
+A handcrafted, production-grade personal portfolio by **Shubham Hadawle** — MS in Computer Science at Northeastern University (Khoury College of Computer Science), engineering across Software, AI/ML, Data Science, and applied research.
 
 ---
 ## My Personal Website
@@ -208,7 +206,6 @@ For other hosts (Netlify, Cloudflare Pages, AWS Amplify) the project works as a 
 - OG image generation via `@vercel/og`
 
 ---
-
 ## Credits
 
-Designed and created by **Shubham Hadawle**.
+Created by **Shubham Hadawle**.
