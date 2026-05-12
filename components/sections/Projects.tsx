@@ -286,8 +286,13 @@ function ProjectRail({ projects: items }: { projects: Project[] }) {
         return;
       }
       const trackWidth = trackRef.current.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      setMaxShift(Math.max(0, trackWidth - viewportWidth + 96));
+      // documentElement.clientWidth excludes vertical scrollbar — true visible
+      // width, unlike window.innerWidth which overstates by ~15px on Windows.
+      const viewportWidth =
+        document.documentElement.clientWidth || window.innerWidth;
+      // Small +80 buffer + the pr-* track padding give the last card a
+      // comfortable margin from the viewport edge without leaving dead space.
+      setMaxShift(Math.max(0, trackWidth - viewportWidth + 80));
     };
 
     measure();
@@ -300,8 +305,12 @@ function ProjectRail({ projects: items }: { projects: Project[] }) {
     offset: ["start start", "end end"],
   });
 
-  const xRaw = useTransform(scrollYProgress, [0, 1], [0, -maxShift]);
-  const x = useSpring(xRaw, { stiffness: 110, damping: 28, mass: 0.6 });
+  // x is mapped directly from scroll progress with NO spring — eliminates the
+  // ~0.6s settling lag that was leaving the last card half-clipped. The 0.85
+  // upper bound means x reaches -maxShift at 85% of section scroll, and the
+  // remaining 15% is a settle-pause where the rail sits motionless at its end
+  // position so the user has clear time to read the last card.
+  const x = useTransform(scrollYProgress, [0, 0.85], [0, -maxShift]);
 
   // Slight depth-of-field on the inner cards
   const innerScaleRaw = useTransform(
@@ -314,12 +323,13 @@ function ProjectRail({ projects: items }: { projects: Project[] }) {
     damping: 26,
   });
 
-  // Section height = travel needed to drag the whole rail across the viewport.
-  // Falls back to a sane minimum so the section never collapses.
+  // Section height drives how much vertical scroll the rail consumes.
+  // 100vh baseline (sticky room) + ~0.2 × maxShift extra vh of pan travel.
+  // Tuned so a typical desktop layout takes ~13 mouse-wheel notches to
+  // traverse from start of pan to the settle-pause at the end.
   const heightVh = useMemo(() => {
     if (!isDesktop || maxShift === 0) return 0;
-    // ~ 80vh of vertical scroll per 600px of horizontal travel + 100vh sticky room
-    return Math.round(100 + (maxShift / 600) * 80);
+    return Math.round(100 + maxShift * 0.2);
   }, [isDesktop, maxShift]);
 
   // Mobile / reduced-motion fallback: native horizontal scroll, no parallax.
@@ -349,7 +359,7 @@ function ProjectRail({ projects: items }: { projects: Project[] }) {
       className="relative mt-10"
       style={{ height: `${heightVh}vh` }}
     >
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden py-12">
+      <div className="sticky top-0 flex min-h-screen flex-col justify-start overflow-hidden pb-6 pt-6 sm:pt-8">
         <div className="container-tight">
           <RailHeader />
         </div>
@@ -357,19 +367,28 @@ function ProjectRail({ projects: items }: { projects: Project[] }) {
         <motion.div
           ref={trackRef}
           style={{ x }}
-          className="mt-6 flex w-max items-stretch gap-6 pl-6 pr-24"
+          className="mt-6 flex w-max items-stretch gap-6 pl-6 sm:pl-10"
         >
-          {items.map((p, i) => (
-            <motion.div
-              key={p.slug}
-              style={{ scale: innerScale }}
-              className="w-[440px] flex-none"
-            >
-              <Reveal delay={i * 0.06}>
-                <ProjectCard project={p} />
-              </Reveal>
-            </motion.div>
-          ))}
+          {items.map((p, i) => {
+            const isLast = i === items.length - 1;
+            return (
+              <motion.div
+                key={p.slug}
+                style={{ scale: innerScale }}
+                className={cn(
+                  "w-[440px] flex-none",
+                  // Trailing spacer after the last card = exactly one card's
+                  // width (440px) of blank space, so the rail visually ends
+                  // where an "imaginary fifth card" would have sat.
+                  isLast && "mr-[440px]"
+                )}
+              >
+                <Reveal delay={i * 0.06}>
+                  <ProjectCard project={p} />
+                </Reveal>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         <ScrollProgressBar progress={scrollYProgress} />
@@ -525,7 +544,7 @@ function ProjectCard({ project }: { project: Project }) {
             ))}
           </div>
 
-          <div className="mt-5 grid grid-cols-3 gap-2">
+          <div className="mt-4 grid grid-cols-3 gap-2">
             {project.metrics.map((m) => (
               <div key={m.label} className="hairline rounded-lg bg-background/70 p-2">
                 <div
@@ -545,7 +564,7 @@ function ProjectCard({ project }: { project: Project }) {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            className="mt-5 inline-flex items-center gap-1.5 self-start font-mono text-[11px] text-muted-foreground transition hover:text-foreground"
+            className="mt-4 inline-flex items-center gap-1.5 self-start font-mono text-[11px] text-muted-foreground transition hover:text-foreground"
           >
             {open ? "Hide architecture" : "Expand architecture"}
             <ChevronDown
@@ -565,12 +584,12 @@ function ProjectCard({ project }: { project: Project }) {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <div className="hairline mt-4 rounded-xl bg-background/70 p-3">
-                  <pre className="overflow-x-auto font-mono text-[11px] leading-relaxed text-muted-foreground">
+                <div className="hairline mt-3 rounded-xl bg-background/70 p-2.5">
+                  <pre className="overflow-x-auto font-mono text-[10.5px] leading-snug text-muted-foreground">
 {generateAsciiArchitecture(project)}
                   </pre>
                 </div>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                <p className="mt-2.5 text-[11.5px] leading-snug text-muted-foreground">
                   <span className="text-foreground">Problem:</span> {project.problem}{" "}
                   <span className="text-foreground">Solution:</span> {project.solution}
                 </p>

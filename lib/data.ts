@@ -64,7 +64,7 @@ export const education = [
 
 export const stats = [
   { label: "Years engineering", value: "4+" },
-  { label: "Published papers", value: "2" },
+  { label: "Research experiences", value: "2" },
   { label: "App downloads", value: "1,000+" },
   { label: "Model accuracy", value: "96.7%" },
 ] as const;
